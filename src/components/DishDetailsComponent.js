@@ -74,7 +74,6 @@ function RenderDish({dish}){
                 <div></div>
             );
         return (            
-            
                 <div className="row">
                 <RenderDish dish = {props.dish} />
                 <RenderCommments comments = {props.dish.comments} />
