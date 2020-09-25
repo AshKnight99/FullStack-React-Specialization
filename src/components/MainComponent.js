@@ -31,6 +31,13 @@ class Main extends Component{
              />
           );
       }
+      const DishWithId = ({match}) =>{
+          //extracting first item[0] from the matched param string value of the id
+        return(
+            <DishDetails dish ={this.state.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]} 
+            comments = {this.state.comments.filter((comm) => comm.dishId  ===  parseInt(match.params.dishId,10))}/>
+        );
+      }
       //Here we specify Menu with the parameters we need to send
     return (
       <div>
@@ -38,6 +45,7 @@ class Main extends Component{
         <Switch>
             <Route path="/home" component={HomePage} />            
             <Route exact path="/menu" component={() =><Menu dishes={this.state.dishes} />} />
+            <Route path="/menu/:dishId" component={DishWithId} />
             <Route exact path ="/contact" component={Contact} /> 
             <Redirect to = "/home" />
         </Switch>
