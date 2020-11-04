@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Loading } from './LoadingComponent';
 import { Card, CardBody, CardImg, CardText, CardTitle, BreadcrumbItem, Breadcrumb, Label, Button, Modal, ModalHeader, ModalBody, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Error, Errors } from 'react-redux-form';
@@ -23,7 +24,7 @@ class CommentForm extends Component {
     handleSubmit(values) {
         alert("Current State is :" + JSON.stringify(values));
         this.toggleModal();
-        this.props.addComment(this.props.dishId,values.rating,values.name,values.comment);
+        this.props.addComment(this.props.dishId, values.rating, values.name, values.comment);
     }
     render() {
         return (
@@ -117,14 +118,7 @@ class CommentForm extends Component {
         );
     }
 }
-function SubmitComment() {
-    return (
-        <div>
 
-        </div>
-    );
-
-}
 function RenderDish({ dish }) {
 
 
@@ -156,7 +150,7 @@ function RenderDish({ dish }) {
     }
 
 }
-function RenderCommments({ comments,addComment,dishId }) {
+function RenderCommments({ comments, addComment, dishId }) {
     console.log(comments);
     if (comments == null) {
         return (
@@ -187,7 +181,7 @@ function RenderCommments({ comments,addComment,dishId }) {
                 <h4>Comments</h4>
                 <ul className="list-unstyled">
                     {comm}
-                    <CommentForm dishId = {dishId} addComment = {addComment} />
+                    <CommentForm dishId={dishId} addComment={addComment} />
                 </ul>
             </div>
         );
@@ -195,8 +189,28 @@ function RenderCommments({ comments,addComment,dishId }) {
 }
 const DishDetails = (props) => {
     // console.log("DishDetails Component rendered");
+    if (props.isLoading) {
+        return (
+            <div className="conatianer">
+                <div className="row" >
+                    <Loading />
+                </div>
+            </div>
+
+        );
+    }
+    else if (props.errMess) {
+        return (
+            <div className="conatianer">
+                <div className="row" >
+                    <h4>{props.errMess}</h4>
+                </div>
+            </div>
+
+        );
+    }
     const dish = props.dish;
-    if (dish == null)
+     if (dish == null)
         return (
             <div></div>
         );
@@ -219,8 +233,8 @@ const DishDetails = (props) => {
             <div className="row">
                 <RenderDish dish={props.dish} />
                 <RenderCommments comments={props.comments}
-                addComment = {props.addComment}
-                dishId = {props.dish.id} />
+                    addComment={props.addComment}
+                    dishId={props.dish.id} />
             </div>
 
 

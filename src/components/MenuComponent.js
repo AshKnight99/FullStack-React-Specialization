@@ -1,5 +1,6 @@
 import React from "react";
 import { Media } from 'reactstrap';
+import {Loading} from './LoadingComponent'
 import {Card,CardImg,CardImgOverlay,CardText,CardBody,CardTitle,Breadcrumb,BreadcrumbItem} from 'reactstrap'
 import {Link} from 'react-router-dom';
 
@@ -37,14 +38,35 @@ function RenderMenuItem({dish,onClick}){
     );
 }
 const Menu = (props) => {
-    const menu = props.dishes.map((dish) => {
+    const menu = props.dishes.dishes.map((dish) => {
         return (
             <div  className="col-12 col-md-5 m-1">
              <RenderMenuItem dish = {dish} onClick = {props.onClick} />
             </div>
           );
       });
-    return (
+      if(props.dishes.isLoading){
+        return (
+            <div className="conatianer">
+                <div className="row" >
+                    <Loading />
+                </div>
+            </div>
+
+        );
+    }
+    else if (props.dishes.errMess) {
+        return (
+            <div className="conatianer">
+                <div className="row" >
+                    <h4>{props.dishes.errMess}</h4>
+                </div>
+            </div>
+
+        );
+    }
+    else
+    {return (
         <div className="continer" >
             <div className ="row">
                 <Breadcrumb>
@@ -66,6 +88,7 @@ const Menu = (props) => {
             
         </div>
     );
+}
 }
         //map is used to iterate over list of items        
         
