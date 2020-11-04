@@ -39,7 +39,7 @@ class Main extends Component{
           //extracting first item[0] from the matched param string value of the id
         return(
             <DishDetails dish ={this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]} 
-            comments = {this.props.comments.filter((comm) => comm.dishId  ===  parseInt(match.params.dishId,10))}/>
+            comments = {this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}/>
         );
       }
       //Here we specify routes with the parameters we need to send
