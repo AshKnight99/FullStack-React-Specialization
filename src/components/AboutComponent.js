@@ -1,28 +1,57 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { baseUrl } from '../shared/baseUrl';
+import { Loading } from './LoadingComponent';
+import { Fade, Stagger } from 'react-animation-components';
 
-function RenderLeader({ leader }) {
-    return (
-        <Media>
-            <Media left className="mt-3">
-                <Media object src={leader.image} alt={leader.name} />
-            </Media>
-            <Media body className="ml-5">
-                <Media heading>{leader.name}</Media>
-                <p>{leader.designation}</p>
-                <p> {leader.description} </p>
-            </Media>
-        </Media>
-    );
+function RenderLeader({ leader, isLoading, errMess }) {
+   
+        return (
+            <Stagger in>
+                <Fade in>
+                    <Media>
+                        <Media left className="mt-3">
+                            <Media object src={baseUrl + leader.image} alt={leader.name} />
+                        </Media>
+                        <Media body className="ml-5">
+                            <Media heading>{leader.name}</Media>
+                            <p>{leader.designation}</p>
+                            <p> {leader.description} </p>
+                        </Media>
+                    </Media>
+                </Fade>
+            </Stagger>
+        );
+    
 }
 
 function About(props) {
+    if (props.isLoading) {
+        return (
+            <div className="conatianer">
+                <div className="row" >
+                    <Loading />
+                </div>
+            </div>
+
+        );
+    }
+    else if (props.errMess) {
+        return (
+            <div className="conatianer">
+                <div className="row" >
+                    <h4>{props.errMess}</h4>
+                </div>
+            </div>
+
+        );
+    }
 
     const leaders = props.leaders.map((leader) => {
         return (
-            <RenderLeader leader = {leader} />
-                    );
+            <RenderLeader leader={leader}/>
+        );
     });
 
     return (

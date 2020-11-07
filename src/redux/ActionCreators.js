@@ -1,8 +1,7 @@
 import { actionTypes } from "react-redux-form";
 import *  as ActionTypes from './ActionTypes';
-import { DISHES } from "../shared/dishes";
-
 import { baseUrl } from '../shared/baseUrl';
+import { connectAdvanced } from "react-redux";
 
 export const addComment = (comment) => ({
     type: ActionTypes.ADD_COMMENT,
@@ -169,3 +168,97 @@ export const addPromos = (promos) => ({
     type: ActionTypes.ADD_PROMOS,
     payload: promos
 });
+
+//Leaders
+
+export const fetchLeaders = () => (dispatch) => {
+    //actually communicate with fetch
+    dispatch(leadersLoading(true));
+
+    return fetch(baseUrl + 'leaders')
+        .then(response => {
+            if (response.ok) {
+                return response // sends promises to next then
+            }
+            else {
+                //error handler with status of 404
+                var error = new Error('Error' + response.status + ":" + response.statusText);
+                error.response = response;
+                throw error; // implement catch to handle error
+            }
+        }, error => {
+            //error handler when you get no response
+            var errMess = new Error(error.message);
+            throw errMess;
+        })
+        .then(response => response.json())  //callback funstion
+        .then(leaders => dispatch(addLeaders(leaders)))
+        .catch(error => dispatch(leadersFailed(error.message)));;
+};
+
+//Returning
+export const leadersLoading = () => ({
+    type: ActionTypes.LEADERS_LOADING,
+
+});
+
+export const leadersFailed = (errmess) => ({
+    type: ActionTypes.LEADERS_FAILED,
+    payload: errmess
+});
+
+export const addLeaders = (leaders) => ({
+    type: ActionTypes.ADD_LEADERS,
+    payload: leaders
+});
+
+//postfeedback
+
+export const postFeedback = (
+    firstname,
+    lastname,
+    telnum,
+    email,
+    agree,
+    contactType,
+    message) => (dispatch) => {
+        const newFeedback = {
+            firstname: firstname,
+            lastname: lastname,
+            telnum: telnum,
+            email: email,
+            agree: agree,
+            contactType: contactType,
+            message: message
+        }       
+
+        return fetch(baseUrl + 'feedback', {
+            method: "POST",
+            body: JSON.stringify(newFeedback),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin'
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response // sends promises to next then
+                }
+                else {
+                    //error handler with status of 404
+                    var error = new Error('Error' + response.status + ":" + response.statusText);
+                    error.response = response;
+                    throw error; // implement catch to handle error
+                }
+            }, error => {
+                //error handler when you get no response
+                var errMess = new Error(error.message);
+                throw errMess;
+            })
+            .then(response => response.json())
+            .then(response => alert( "Thank you for your Feedback!" +JSON.stringify(response)))
+            .catch(error => {
+                console.log("post feedbacks", error.message);
+      alert("Your feedback could not be posted\nError: " + error.message);
+    })
+    }
